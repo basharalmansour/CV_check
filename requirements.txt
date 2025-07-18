@@ -1,1 +1,2 @@
+pip install flask flask_cors python-docx pdfplumber spacy sentence-transformers nltk gunicorn torch torchvision
 pip freeze > requirements.txt
