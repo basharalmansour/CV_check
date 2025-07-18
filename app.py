@@ -13,6 +13,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nlp = spacy.load("en_core_web_sm")
 from sentence_transformers import SentenceTransformer, util
+import spacy.cli
+spacy.cli.download("en_core_web_sm")
 
 def read_file_content(file_path):
   text = ""
