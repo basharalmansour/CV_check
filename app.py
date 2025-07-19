@@ -1,5 +1,3 @@
-!pip install python-docx
-!pip install pdfplumber
 import os
 from docx import Document
 import gdown
