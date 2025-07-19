@@ -13,8 +13,14 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nlp = spacy.load("en_core_web_sm")
 from sentence_transformers import SentenceTransformer, util
-import spacy.cli
-spacy.cli.download("en_core_web_sm")
+
+app = Flask(__name__)
+CORS(app)
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
+
+# إنشاء مجلد التحميل إذا لم يكن موجودًا
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 def read_file_content(file_path):
   text = ""
@@ -38,6 +44,21 @@ def read_file_content(file_path):
 
   except Exception as e:
     return f"حدث خطأ أثناء قراءة الملف: {str(e)}"
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload_files():
+    cv_file = request.files.get('cv')
+    job_file = request.files.get('job_description')
+
+    cv_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(cv_file.filename))
+    job_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(job_file.filename))
+    
+    cv_file.save(cv_path)
+    job_file.save(job_path)
 
 def clean_text(text):
     text = re.sub(r'[^\w\s]', '', text)  # إزالة علامات الترقيم
@@ -63,9 +84,12 @@ def calculate_similarity(text1, text2):
     embedding2 = model.encode(text2, convert_to_tensor=True)
     similarity = util.pytorch_cos_sim(embedding1, embedding2)
     return similarity.item()
-
-gd_cv = gdown.download("https://drive.google.com/uc?id=1SdEppCjEQbRPiLGsIyNMxyWotuMECjPF")
-gd_des= gdown.download("https://drive.google.com/uc?id=1k2VSgR_pIYmAdfBISYyvEwjC8rvtlkEm")
+  
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+    
+gd_cv = cv_path
+gd_des= job_path
 
 read_cv= read_file_content(gd_cv)
 clean_cv=clean_text(read_cv)
