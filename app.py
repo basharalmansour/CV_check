@@ -1,6 +1,5 @@
 import os
 from docx import Document
-import gdown
 import pdfplumber
 import re
 import spacy
