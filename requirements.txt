@@ -1,5 +1,4 @@
-flask
-flask-cors
+flask==2.0.1
 python-docx
 pdfplumber
 spacy
