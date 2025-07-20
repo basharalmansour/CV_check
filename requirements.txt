@@ -1,7 +1,8 @@
 flask==2.0.1
 python-docx
 pdfplumber
-spacy
+spacy==3.5.0
+blis==0.7.9
 nltk
 sentence-transformers
 torch
