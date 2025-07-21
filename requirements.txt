@@ -5,4 +5,5 @@ pdfplumber==0.7.4
 spacy==3.4.1
 nltk==3.7
 sentence-transformers==2.2.2
-torch>=1.6.0
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==1.10.2+cpu -f https://download.pytorch.org/whl/torch_stable.html
