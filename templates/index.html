@@ -3,160 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مطابقة السيرة الذاتية مع الوظيفة</title>
+    <title>مطابقة السيرة الذاتية مع الوصف الوظيفي</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
+            font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
+            padding: 20px;
+            text-align: right;
         }
-        
         .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: 30px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
         }
-        
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
-        
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: bold;
-            color: #3498db;
         }
-        
-        input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px dashed #3498db;
-            border-radius: 5px;
-            background: #f8f9fa;
-            cursor: pointer;
-        }
-        
         button {
-            background: #3498db;
+            background-color: #4CAF50;
             color: white;
+            padding: 10px 15px;
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
         }
-        
         button:hover {
-            background: #2980b9;
+            background-color: #45a049;
         }
-        
-        .result {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 5px;
-            background: #e8f4fc;
-            display: none;
-        }
-        
-        .similarity-score {
-            font-size: 24px;
-            font-weight: bold;
-            color: #27ae60;
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .keywords {
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        .loading {
-            text-align: center;
-            margin: 20px 0;
-            display: none;
-        }
-        
-        .error {
-            color: #e74c3c;
-            background: #fdecea;
-            padding: 15px;
-            border-radius: 5px;
+        #result {
             margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
             display: none;
+        }
+        .progress {
+            display: none;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>مطابقة السيرة الذاتية مع الوظيفة</h1>
+        <h1>مطابقة السيرة الذاتية مع الوصف الوظيفي</h1>
+        <p>قم بتحميل سيرتك الذاتية ووصف الوظيفة لمعرفة درجة المطابقة بينهما</p>
         
-        <form id="uploadForm">
+        <form id="uploadForm" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="cv">السيرة الذاتية (PDF أو DOCX)</label>
-                <input type="file" id="cv" name="cv" accept=".pdf,.docx,.doc" required>
+                <label for="cv">السيرة الذاتية (PDF أو Word):</label>
+                <input type="file" id="cv" name="cv" accept=".pdf,.docx" required>
             </div>
             
             <div class="form-group">
-                <label for="job_description">وصف الوظيفة (PDF أو DOCX)</label>
-                <input type="file" id="job_description" name="job_description" accept=".pdf,.docx,.doc" required>
+                <label for="job_description">وصف الوظيفة (PDF أو Word):</label>
+                <input type="file" id="job_description" name="job_description" accept=".pdf,.docx" required>
             </div>
             
-            <button type="submit">تحليل المطابقة</button>
+            <button type="submit">تحليل الملفات</button>
         </form>
         
-        <div class="loading" id="loading">
-            جاري المعالجة... قد تستغرق العملية بضع ثوانٍ
+        <div class="progress" id="progress">
+            جاري معالجة الملفات... الرجاء الانتظار
         </div>
         
-        <div class="error" id="error"></div>
-        
-        <div class="result" id="result">
+        <div id="result">
             <h2>نتيجة التحليل</h2>
-            <div class="similarity-score" id="similarityScore"></div>
+            <p>درجة المطابقة: <span id="similarityScore"></span>%</p>
             
-            <div class="keywords">
-                <h3>الكلمات المفتاحية في السيرة الذاتية:</h3>
-                <p id="cvKeywords"></p>
-            </div>
+            <h3>الكلمات المفتاحية في سيرتك الذاتية:</h3>
+            <div id="cvKeywords"></div>
             
-            <div class="keywords">
-                <h3>الكلمات المفتاحية في الوصف الوظيفي:</h3>
-                <p id="jobKeywords"></p>
-            </div>
+            <h3>الكلمات المفتاحية في وصف الوظيفة:</h3>
+            <div id="jobKeywords"></div>
         </div>
     </div>
-
+    
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // إظهار حالة التحميل وإخفاء النتائج والأخطاء
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
+            const form = e.target;
+            const formData = new FormData(form);
+            const resultDiv = document.getElementById('result');
+            const progressDiv = document.getElementById('progress');
             
-            const formData = new FormData();
-            formData.append('cv', document.getElementById('cv').files[0]);
-            formData.append('job_description', document.getElementById('job_description').files[0]);
+            // إظهار رسالة التقدم وإخفاء النتيجة
+            progressDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
             
             try {
                 const response = await fetch('/upload', {
@@ -166,21 +105,24 @@
                 
                 const data = await response.json();
                 
-                if (response.status !== 200) {
-                    throw new Error(data.error || 'حدث خطأ غير متوقع');
+                if (response.ok) {
+                    // عرض النتائج
+                    document.getElementById('similarityScore').textContent = data.similarity_score;
+                    
+                    const cvKeywordsDiv = document.getElementById('cvKeywords');
+                    cvKeywordsDiv.innerHTML = data.cv_keywords.join(', ');
+                    
+                    const jobKeywordsDiv = document.getElementById('jobKeywords');
+                    jobKeywordsDiv.innerHTML = data.job_keywords.join(', ');
+                    
+                    resultDiv.style.display = 'block';
+                } else {
+                    alert(`خطأ: ${data.error}`);
                 }
-                
-                // عرض النتائج
-                document.getElementById('similarityScore').textContent = `نسبة المطابقة: ${data.similarity}`;
-                document.getElementById('cvKeywords').textContent = data.cv_keywords;
-                document.getElementById('jobKeywords').textContent = data.job_keywords;
-                document.getElementById('result').style.display = 'block';
-                
             } catch (error) {
-                document.getElementById('error').textContent = error.message;
-                document.getElementById('error').style.display = 'block';
+                alert(`حدث خطأ في الاتصال بالخادم: ${error.message}`);
             } finally {
-                document.getElementById('loading').style.display = 'none';
+                progressDiv.style.display = 'none';
             }
         });
     </script>
