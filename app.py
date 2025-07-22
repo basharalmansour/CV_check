@@ -17,7 +17,7 @@ nltk.download('stopwords')
 
 # تحميل نموذج spaCy
 try:
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm", disable=['parser', 'ner'])
 except:
     # إذا لم يكن النموذج مثبتاً
     os.system("python -m spacy download en_core_web_sm")
@@ -220,10 +220,9 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 def read_file_content(file_path):
-    text = ""
+    text = text[:10000] if text else ""
     try:
         file_extension = os.path.splitext(file_path)[1].lower()
-        
         if file_extension == '.pdf':
             with pdfplumber.open(file_path) as pdf:
                 for page in pdf.pages:
