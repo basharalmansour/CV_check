@@ -220,7 +220,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 def read_file_content(file_path):
-    text = text[:10000] if text else ""
+    text = ""
     try:
         file_extension = os.path.splitext(file_path)[1].lower()
         if file_extension == '.pdf':
