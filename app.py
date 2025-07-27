@@ -3,13 +3,17 @@ from flask import Flask, request, render_template_string, jsonify
 from werkzeug.utils import secure_filename
 from docx import Document
 import pdfplumber
+import gdown
+import pdfplumber
 import re
 import spacy
 import nltk
+nltk.download('punkt_tab')
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+nlp = spacy.load("en_core_web_sm")
 from sentence_transformers import SentenceTransformer, util
-from flask_cors import CORS
 
 # تنزيل بيانات NLTK المطلوبة
 nltk.download('punkt')
